@@ -15,7 +15,7 @@ O projeto tem como foco auxiliar estudantes no gerenciamento de estudos, por mei
 ### Front-end
 - React
 - JavaScript ou TypeScript
-- CSS (ou Tailwind, se desejar)
+- CSS (ou Tailwind)
 
 ### Back-end
 - Node.js
