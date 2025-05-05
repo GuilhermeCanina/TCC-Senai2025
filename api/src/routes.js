@@ -9,6 +9,8 @@ const medalhasController = require('./controllers/controllerMedalha');
 routes.get('/usuarios', usuariosController.getAllUsers);
 routes.get('/usuarios/:id', usuariosController.getUserById);
 routes.post('/usuarios', usuariosController.createUser);
+routes.put('/usuarios/:id', usuariosController.updateUser);
+routes.delete('/usuarios/:id', usuariosController.deleteUser);
 
 routes.get('/medalhas', medalhasController.getAllMedalhas);
 routes.get('/medalhas/:id', medalhasController.getMedalhaById);
