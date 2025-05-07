@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const { verificarEMedalharUsuario } = require('../services/medalhasService');
 
 async function getAllSessoes(req, res) {
   try {
@@ -23,24 +24,24 @@ async function getSessaoById(req, res) {
   }
 }
 
+
 async function createSessaoEstudo(req, res) {
-    const { usuarioId, topico, duracao } = req.body;
+  const { usuarioId, topico, duracao } = req.body;
 
-    try {
-        const novaSessao = await prisma.sessaoEstudo.create({
-            data: {
-                usuarioId: Number(usuarioId),
-                topico,
-                duracao: Number(duracao),
-            },
-        });
+  try {
+      const novaSessao = await prisma.sessaoEstudo.create({
+          data: { usuarioId, topico, duracao },
+      });
 
-        res.status(201).json(novaSessao);
-    } catch (error) {
-        console.error('Erro ao criar sessão:', error);
-        res.status(500).json({ error: 'Erro ao criar sessão' });
-    }
+      await verificarEMedalharUsuario(usuarioId); 
+
+      res.status(201).json(novaSessao);
+  } catch (error) {
+      console.error('Erro ao criar sessão:', error);
+      res.status(500).json({ error: 'Erro ao criar sessão' });
+  }
 }
+
 
 async function updateSessao(req, res) {
   const { id } = req.params;

@@ -21,6 +21,8 @@ async function enviarMensagem(req, res) {
             },
         });
 
+        await prisma.usuarioMedalha(usuarioId);
+
         res.status(201).json(novaMensagem);
     } catch (error) {
         console.error("Erro ao enviar mensagem:", error);
