@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel do Usuário</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🎓 Bem-vindo, Guilherme!</h1>
+    <p class="sub">Gerencie suas sessões, conquistas e interações:</p>
+
+    <section>
+      <h2 class="section-title">📌 Continue de onde parou</h2>
+      <div class="card-grid">
+        <a class="card" href="sessoes.html">📖 Estudo: HTML Básico</a>
+        <a class="card" href="sessoes.html">📘 Estudo: Matemática Financeira</a>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">🌟 Recomendados para você</h2>
+      <div class="card-grid">
+        <a class="card" href="#">🧠 Técnicas de Memorização</a>
+        <a class="card" href="#">🗓️ Como criar um plano de estudos</a>
+        <a class="card" href="#">⏳ Pomodoro + IA</a>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">🔥 Treine aqui</h2>
+      <div class="card-grid">
+        <a class="card" href="#">📝 Quiz de Lógica</a>
+        <a class="card" href="#">💡 Desafios Semanais</a>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">📂 Menu Rápido</h2>
+      <div class="card-grid">
+        <a class="card" href="sessoes.html">📚 Sessões de Estudo</a>
+        <a class="card" href="medalhas.html">🏅 Medalhas</a>
+      </div>
+    </section>
+  </div>
+
+<div class="chatbot" id="chatbot">
+  <div class="chatbot-header">
+    🤖 Assistente
+    <button class="close-btn" onclick="fecharChatbot()">❌</button>
+  </div>
+  <div class="chatbot-messages" id="messages">
+    <div class="bot-message chatbot-message">Olá! Como posso ajudar hoje?</div>
+  </div>
+  <div class="chatbot-input">
+    <input type="text" id="userInput" placeholder="Digite sua dúvida..." />
+    <button onclick="sendMessage()">Enviar</button>
+  </div>
+</div>
+<script src="script.js"></script>
+
+</body>
+</html>
