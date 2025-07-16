@@ -21,6 +21,7 @@ model Usuario {
   criadoEm     DateTime       @default(now())
   sessoes      SessaoEstudo[]
   mensagens    Mensagem[]
+  role        String         @default("usuario") // pode ser "admin" ou "usuario"
   medalhas     UsuarioMedalha[]
 }
 

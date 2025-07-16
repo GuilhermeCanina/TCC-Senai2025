@@ -5,6 +5,7 @@ CREATE TABLE `Usuario` (
     `email` VARCHAR(191) NOT NULL,
     `senha` VARCHAR(191) NOT NULL,
     `criadoEm` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `role` VARCHAR(191) NOT NULL DEFAULT 'usuario',
 
     UNIQUE INDEX `Usuario_email_key`(`email`),
     PRIMARY KEY (`id`)

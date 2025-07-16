@@ -6,33 +6,39 @@ const medalhasController = require('./controllers/controllerMedalha');
 const sessaoEstudoController = require('./controllers/controllerSessaoEstudo');
 const mensagensController = require('./controllers/controllermensagens');
 
-// Definindo as rotas
+const validateUser = require('./middlewares/validateUser');
+const autenticarToken = require('./middlewares/auth');
+const isAdmin = require('./middlewares/isAdmin'); // ← novo
 
+routes.get('/', (req, res) => {
+  res.send('API de Estudo em Grupo funcionando!');
+});
 
-routes.get('/usuarios', usuariosController.getAllUsers);
-routes.get('/usuarios/:id', usuariosController.getUserById);
-routes.post('/usuarios', usuariosController.createUser);
-routes.put('/usuarios/:id', usuariosController.updateUser);
-routes.delete('/usuarios/:id', usuariosController.deleteUser);
+// ROTAS DE USUÁRIO
+routes.post('/usuarios', validateUser, usuariosController.createUser);
+routes.post('/login', validateUser, usuariosController.loginUser);
 
+routes.get('/usuarios', autenticarToken, isAdmin, usuariosController.getAllUsers); // ← apenas admin
+routes.get('/usuarios/:id', autenticarToken, usuariosController.getUserById);
+routes.put('/usuarios/:id', autenticarToken, usuariosController.updateUser);
+routes.delete('/usuarios/:id', autenticarToken, isAdmin, usuariosController.deleteUser); // ← apenas admin
 
-// Rotas para medalhas
-routes.get('/medalhas', medalhasController.getAllMedalhas);
-routes.get('/medalhas/:id', medalhasController.getMedalhaById);
-routes.post('/medalhas', medalhasController.createMedalha);
+routes.get('/me', autenticarToken, usuariosController.getMe);
 
-// Rotas para sessões de estudo
+// ROTAS DE MEDALHA
+routes.get('/medalhas', autenticarToken, medalhasController.getAllMedalhas);
+routes.get('/medalhas/:id', autenticarToken, medalhasController.getMedalhaById);
+routes.post('/medalhas', autenticarToken, isAdmin, medalhasController.createMedalha); // ← apenas admin
 
-routes.get('/sessoes', sessaoEstudoController.getAllSessoes);
-routes.get('/sessoes/:id', sessaoEstudoController.getSessaoById);
-routes.post('/sessoes', sessaoEstudoController.createSessaoEstudo);
-routes.put('/sessoes/:id', sessaoEstudoController.updateSessao);
-routes.delete('/sessoes/:id', sessaoEstudoController.deleteSessao);
+// ROTAS DE SESSÕES DE ESTUDO
+routes.get('/sessoes', autenticarToken, sessaoEstudoController.getAllSessoes);
+routes.get('/sessoes/:id', autenticarToken, sessaoEstudoController.getSessaoById);
+routes.post('/sessoes', autenticarToken, sessaoEstudoController.createSessaoEstudo);
+routes.put('/sessoes/:id', autenticarToken, sessaoEstudoController.updateSessao);
+routes.delete('/sessoes/:id', autenticarToken, sessaoEstudoController.deleteSessao);
 
-// Rotas mensagens
-
-routes.post('/mensagens', mensagensController.enviarMensagem);
-routes.get('/usuarios/:usuarioId/mensagens', mensagensController.buscarMensagensPorUsuario);
-
+// ROTAS DE MENSAGENS
+routes.post('/mensagens', autenticarToken, mensagensController.enviarMensagem);
+routes.get('/usuarios/:usuarioId/mensagens', autenticarToken, mensagensController.buscarMensagensPorUsuario);
 
 module.exports = routes;
