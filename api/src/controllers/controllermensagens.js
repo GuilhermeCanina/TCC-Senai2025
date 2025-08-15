@@ -1,52 +1,26 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import dotenv from "dotenv";
 
-function gerarRespostaBot(mensagemUsuario) {
-    return `Você disse: "${mensagemUsuario}". O bot ainda está aprendendo`;
-}
+dotenv.config();
 
-// Apenas um teste de resposta do bot, no futuro mudar para um chatbot de verdade
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-async function enviarMensagem(req, res) {
-    const { usuarioId, texto } = req.body;
+export const chatIA = async (req, res) => {
+  try {
+    const { text } = req.body;
 
-    try {
-        const resposta = gerarRespostaBot(texto);
-
-        const novaMensagem = await prisma.mensagem.create({
-            data: {
-                usuarioId: Number(usuarioId),
-                texto,
-                resposta,
-            },
-        });
-
-        await prisma.usuarioMedalha(usuarioId);
-
-        res.status(201).json(novaMensagem);
-    } catch (error) {
-        console.error("Erro ao enviar mensagem:", error);
-        res.status(500).json({ error: 'Erro interno no servidor' });
+    if (!text) {
+      return res.status(400).json({ error: "Campo 'text' é obrigatório." });
     }
-}
 
-async function buscarMensagensPorUsuario(req, res) {
-    const { usuarioId } = req.params;
+    const model = genAI.getGenerativeModel({ model: "gemma-3n-e2b-it" });
 
-    try {
-        const mensagens = await prisma.mensagem.findMany({
-            where: { usuarioId: Number(usuarioId) },
-            orderBy: { enviadaEm: 'desc' },
-        });
+    const result = await model.generateContent(text);
+    const responseText = result.response.text();
 
-        res.status(200).json(mensagens);
-    } catch (error) {
-        console.error("Erro ao buscar mensagens:", error);
-        res.status(500).json({ error: 'Erro interno no servidor' });
-    }
-}
-
-module.exports = {
-    enviarMensagem,
-    buscarMensagensPorUsuario,
+    res.json({ response: responseText });
+  } catch (error) {
+    console.error("Erro na IA:", error);
+    res.status(500).json({ error: "Erro ao gerar resposta da IA" });
+  }
 };

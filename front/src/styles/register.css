@@ -1,0 +1,124 @@
+.register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card do formulário */
+.register-container > form {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  transition: all 0.3s ease;
+}
+
+.register-container > form:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Título */
+.register-container h2 {
+  color: #ffffff;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* Campos de input */
+.register-container input {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #f8fafc;
+}
+
+.register-container input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+  outline: none;
+  background-color: white;
+}
+
+.register-container input::placeholder {
+  color: #a0aec0;
+}
+
+/* Botões */
+.register-container button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+}
+
+/* Botão de Entrar */
+.register-container button[type="submit"] {
+  background: linear-gradient(to right, #4f46e5, #7c3aed);
+  color: white;
+}
+
+.register-container button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
+}
+
+.register-container button[type="submit"]:active {
+  transform: translateY(0);
+}
+
+/* Botão de Registrar */
+.register-container button[type="button"] {
+  background-color: white;
+  color: #4f46e5;
+  border: 2px solid #e2e8f0;
+}
+
+.register-container button[type="button"]:hover {
+  background-color: #f8fafc;
+  border-color: #c7d2fe;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Mensagens de erro (pode adicionar dinamicamente) */
+.error-message {
+  color: #ef4444;
+  font-size: 0.9rem;
+  margin-top: -15px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .register-container > form {
+    padding: 30px 20px;
+  }
+  
+  .register-container h2 {
+    font-size: 1.8rem;
+  }
+  
+  .register-container input,
+  .register-container button {
+    padding: 12px;
+  }
+}

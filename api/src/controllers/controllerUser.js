@@ -94,7 +94,7 @@ async function createUser(req, res) {
                 nome,
                 email,
                 senha: hashedSenha,
-                role, // ← usa o que veio do body
+                role: 'user'
             },
         });
 

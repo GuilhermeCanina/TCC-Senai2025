@@ -37,8 +37,5 @@ routes.post('/sessoes', autenticarToken, sessaoEstudoController.createSessaoEstu
 routes.put('/sessoes/:id', autenticarToken, sessaoEstudoController.updateSessao);
 routes.delete('/sessoes/:id', autenticarToken, sessaoEstudoController.deleteSessao);
 
-// ROTAS DE MENSAGENS
-routes.post('/mensagens', autenticarToken, mensagensController.enviarMensagem);
-routes.get('/usuarios/:usuarioId/mensagens', autenticarToken, mensagensController.buscarMensagensPorUsuario);
 
 module.exports = routes;
