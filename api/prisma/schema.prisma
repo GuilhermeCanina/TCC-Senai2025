@@ -19,6 +19,7 @@ model Usuario {
   email        String         @unique
   senha        String
   criadoEm     DateTime       @default(now())
+  avatarurl    String?
   sessoes      SessaoEstudo[]
   mensagens    Mensagem[]
   role        String         @default("usuario") // pode ser "admin" ou "usuario"

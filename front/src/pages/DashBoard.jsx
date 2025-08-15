@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/dashboard.css';
+import ChatBox from './ChatBot'; // Importando o componente ChatBoxs
 import axios from 'axios';
 import { FiHome, FiBook, FiBarChart2, FiMessageSquare, FiAward, FiSettings, FiLogOut } from 'react-icons/fi';
 
@@ -8,6 +9,7 @@ function Dashboard() {
   const navigate = useNavigate();
   const [nomeUsuario, setNomeUsuario] = useState('');
   const [userInitial, setUserInitial] = useState('');
+  const [avatar, setAvatar] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -16,13 +18,12 @@ function Dashboard() {
       navigate('/login');
     } else {
       axios.get('http://localhost:3001/me', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        headers: { Authorization: `Bearer ${token}` }
       })
       .then((res) => {
         setNomeUsuario(res.data.nome);
         setUserInitial(res.data.nome.charAt(0).toUpperCase());
+        if (res.data.avatarurl) setAvatar(res.data.avatarurl);
       })
       .catch(() => {
         localStorage.removeItem('token');
@@ -44,15 +45,26 @@ function Dashboard() {
           <div className="sidebar-logo">E</div>
           <h2>EstudaFácil</h2>
         </div>
-        
+
+        {/* User Profile */}
         <div className="user-profile">
-          <div className="user-avatar">{userInitial}</div>
+          <div className="user-avatar">
+            {avatar ? (
+              <img
+                src={avatar}
+                alt="avatar"
+                style={{ width: 60, height: 60, borderRadius: '50%' }}
+              />
+            ) : (
+              <div className="user-initial">{userInitial}</div>
+            )}
+          </div>
           <div className="user-info">
             <h3>{nomeUsuario || 'Usuário'}</h3>
             <p>Premium Member</p>
           </div>
         </div>
-        
+
         <ul className="sidebar-menu">
           <li className="menu-item">
             <a href="#home" className="active">
@@ -85,14 +97,14 @@ function Dashboard() {
             </a>
           </li>
           <li className="menu-item">
-            <a href="#config">
+            <a href="/config">
               <FiSettings className="menu-icon" />
               <span>Configurações</span>
             </a>
           </li>
         </ul>
       </div>
-      
+
       {/* Conteúdo principal */}
       <main className="dashboard-main">
         <header className="dashboard-header">
@@ -101,7 +113,7 @@ function Dashboard() {
             <p>Seu desempenho está melhorando a cada dia!</p>
           </div>
         </header>
-        
+
         <div className="dashboard-cards">
           <div className="card">
             <div className="card-header">
@@ -115,7 +127,7 @@ function Dashboard() {
               <small>+15% em relação a ontem</small>
             </div>
           </div>
-          
+
           <div className="card">
             <div className="card-header">
               <h3 className="card-title">Sessões Concluídas</h3>
@@ -128,7 +140,7 @@ function Dashboard() {
               <small>Meta semanal: 30 sessões</small>
             </div>
           </div>
-          
+
           <div className="card">
             <div className="card-header">
               <h3 className="card-title">Desempenho Geral</h3>
@@ -142,43 +154,47 @@ function Dashboard() {
             </div>
           </div>
         </div>
-        
+
         <div className="dashboard-buttons">
-          <button 
+          <button
             className="btn btn-primary"
             onClick={() => navigate('/sessao')}
           >
             <FiBook /> Iniciar Sessão de Estudo
           </button>
-          
-          <button 
+
+          <button
             className="btn btn-secondary"
             onClick={() => navigate('/relatorios')}
           >
             <FiBarChart2 /> Ver Relatórios
           </button>
-          
-          <button 
+
+          <button
             className="btn btn-success"
             onClick={() => navigate('/chat-ia')}
           >
             <FiMessageSquare /> Chat com IA
           </button>
-          
-          <button 
+
+          <button
             className="btn btn-warning"
             onClick={() => navigate('/medalhas')}
           >
             <FiAward /> Minhas Medalhas
           </button>
-          
-          <button 
+
+          <button
             className="btn btn-danger"
             onClick={handleLogout}
           >
             <FiLogOut /> Sair
           </button>
         </div>
+        <section id="chat">
+    <h2>Chat com IA</h2>
+    <ChatBox />
+    </section>
       </main>
     </div>
   );

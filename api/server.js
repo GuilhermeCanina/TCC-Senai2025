@@ -6,6 +6,12 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./src/swagger.json');
 const iaRoutes = iaRoutesModule.default;
 const app = express();
+const path = require('path');
+
+
+//uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 app.use(express.json());
 app.use(cors());

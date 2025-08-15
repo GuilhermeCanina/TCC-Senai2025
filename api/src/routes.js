@@ -6,9 +6,14 @@ const medalhasController = require('./controllers/controllerMedalha');
 const sessaoEstudoController = require('./controllers/controllerSessaoEstudo');
 const mensagensController = require('./controllers/controllermensagens');
 
+const upload = require('../uploads/uploadConfig');
+const { updateAvatar } = require('./controllers/controllerUser');
+
 const validateUser = require('./middlewares/validateUser');
 const autenticarToken = require('./middlewares/auth');
 const isAdmin = require('./middlewares/isAdmin'); // ← novo
+
+routes.put('/user/avatar', autenticarToken, upload.single('avatar'), updateAvatar);
 
 routes.get('/', (req, res) => {
   res.send('API de Estudo em Grupo funcionando!');
