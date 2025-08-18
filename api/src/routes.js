@@ -5,6 +5,7 @@ const usuariosController = require('./controllers/controllerUser');
 const medalhasController = require('./controllers/controllerMedalha');
 const sessaoEstudoController = require('./controllers/controllerSessaoEstudo');
 const mensagensController = require('./controllers/controllermensagens');
+const RelatorioController = require('./controllers/controllerRelatorio');
 
 const upload = require('../uploads/uploadConfig');
 const { updateAvatar } = require('./controllers/controllerUser');
@@ -19,6 +20,10 @@ routes.get('/', (req, res) => {
   res.send('API de Estudo em Grupo funcionando!');
 });
 
+// ROTAS DE RELATÓRIO
+routes.post('/relatorios', autenticarToken, RelatorioController.criarRelatorio);
+routes.get('/relatorios/:usuarioId', autenticarToken, RelatorioController.listarRelatorios);
+
 // ROTAS DE USUÁRIO
 routes.post('/usuarios', validateUser, usuariosController.createUser);
 routes.post('/login', validateUser, usuariosController.loginUser);
@@ -30,6 +35,7 @@ routes.delete('/usuarios/:id', autenticarToken, isAdmin, usuariosController.dele
 routes.patch('/usuarios/nome', autenticarToken, usuariosController.updateMyName); // ← atualizar nome do usuário
 
 routes.get('/me', autenticarToken, usuariosController.getMe);
+routes.delete('/me', autenticarToken, usuariosController.deleteMe); // ← excluir própria conta
 
 // ROTAS DE MEDALHA
 routes.get('/medalhas', autenticarToken, medalhasController.getAllMedalhas);

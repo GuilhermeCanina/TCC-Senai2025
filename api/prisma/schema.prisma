@@ -62,3 +62,5 @@ model Mensagem {
 
   usuario    Usuario  @relation(fields: [usuarioId], references: [id])
 }
+
+

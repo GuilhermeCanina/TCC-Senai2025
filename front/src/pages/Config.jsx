@@ -1,5 +1,6 @@
 import AvatarUploader from '../components/MudarAvatar';
 import MudarNome from '../components/MudarNome';
+import ExcluirConta from '../components/ExcluirConta';
 import '../styles/config.css';
 
 function Config() {
@@ -25,13 +26,11 @@ function Config() {
         <h2>Zona de Perigo</h2>
         <div className="danger-zone-container">
           <p>Essas ações são irreversíveis. Tenha certeza antes de prosseguir.</p>
-          <button className="btn btn-danger">
-            <i className="icon-trash"></i> Excluir Conta
-          </button>
+          <ExcluirConta /> 
         </div>
       </section>
     </div>
   );
-}
+};
 
 export default Config;

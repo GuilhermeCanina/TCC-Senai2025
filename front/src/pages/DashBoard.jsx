@@ -87,12 +87,6 @@ function Dashboard() {
             </div>
           </li>
           <li className="menu-item">
-            <div onClick={() => navigate('/chat')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '0.8rem 1rem' }}>
-              <FiMessageSquare className="menu-icon" />
-              <span>Chat IA</span>
-            </div>
-          </li>
-          <li className="menu-item">
             <div onClick={() => navigate('/medalhas')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '0.8rem 1rem' }}>
               <FiAward className="menu-icon" />
               <span>Medalhas</span>

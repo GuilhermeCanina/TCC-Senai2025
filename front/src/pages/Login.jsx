@@ -19,6 +19,7 @@ function Login() {
 
       alert('Login bem-sucedido!');
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem("usuarioId", response.data.id);
       navigate('/dashboard'); 
     } catch (err) {
       alert('Erro ao fazer login');

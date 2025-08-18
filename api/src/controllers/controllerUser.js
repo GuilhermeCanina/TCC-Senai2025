@@ -3,6 +3,23 @@ const prisma = new PrismaClient();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+async function deleteMe(req, res) {
+    try {
+        const userId = req.user.id;
+        await prisma.usuario.delete({
+            where: { id: userId },
+        });
+        res.status(204).send();
+    } catch (error) {
+        console.error('Erro ao deletar o próprio usuário:', error);
+        if (error.code === 'P2025') {
+            res.status(404).json({ error: 'Usuário não encontrado' });
+        } else {
+            res.status(500).json({ error: 'Erro interno ao deletar usuário' });
+        }
+    }
+}
+
 async function getMe(req, res) {
     try {
         const user = await prisma.usuario.findUnique({
@@ -195,5 +212,6 @@ module.exports = {
     loginUser,
     getMe,
     updateAvatar,
-    updateMyName
+    updateMyName,
+    deleteMe
 };
