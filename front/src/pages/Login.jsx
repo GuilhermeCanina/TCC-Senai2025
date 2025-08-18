@@ -3,6 +3,7 @@ import '../styles/login.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+
 function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -17,14 +18,15 @@ function Login() {
       });
 
       alert('Login bem-sucedido!');
-      localStorage.setItem('token', response.data.token); // salvar token
-      navigate('/dashboard'); // redirecionar para o dashboard
+      localStorage.setItem('token', response.data.token);
+      navigate('/dashboard'); 
     } catch (err) {
       alert('Erro ao fazer login');
     }
   };
 
   return (
+
     <div className="login-container">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>

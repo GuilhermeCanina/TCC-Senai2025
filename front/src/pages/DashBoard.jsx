@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/dashboard.css';
-import ChatBox from './ChatBot'; // Importando o componente ChatBoxs
+import ChatBox from './ChatBot';
 import axios from 'axios';
 import { FiHome, FiBook, FiBarChart2, FiMessageSquare, FiAward, FiSettings, FiLogOut } from 'react-icons/fi';
 
@@ -42,23 +42,25 @@ function Dashboard() {
       {/* Sidebar */}
       <div className="dashboard-sidebar">
         <div className="sidebar-header">
-          <div className="sidebar-logo">E</div>
-          <h2>EstudaFácil</h2>
+          <div className="sidebar-logo">S</div>
+          <h2>SynapLearn</h2>
         </div>
 
         {/* User Profile */}
         <div className="user-profile">
+          <a href="#profile">
           <div className="user-avatar">
             {avatar ? (
               <img
                 src={avatar}
                 alt="avatar"
-                style={{ width: 60, height: 60, borderRadius: '50%' }}
+                style={{ width: 100, height: 100, borderRadius: '50%' }}
               />
             ) : (
               <div className="user-initial">{userInitial}</div>
             )}
           </div>
+          </a>
           <div className="user-info">
             <h3>{nomeUsuario || 'Usuário'}</h3>
             <p>Premium Member</p>
@@ -73,7 +75,7 @@ function Dashboard() {
             </a>
           </li>
           <li className="menu-item">
-            <a href="#sessao">
+            <a href="/sessao">
               <FiBook className="menu-icon" />
               <span>Sessões</span>
             </a>
@@ -168,13 +170,6 @@ function Dashboard() {
             onClick={() => navigate('/relatorios')}
           >
             <FiBarChart2 /> Ver Relatórios
-          </button>
-
-          <button
-            className="btn btn-success"
-            onClick={() => navigate('/chat-ia')}
-          >
-            <FiMessageSquare /> Chat com IA
           </button>
 
           <button

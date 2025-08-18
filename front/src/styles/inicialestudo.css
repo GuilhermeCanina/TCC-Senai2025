@@ -1,0 +1,73 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.inputs {
+  margin-bottom: 20px;
+}
+
+.inputs label {
+  margin-right: 10px;
+}
+
+.inputs input {
+  margin-left: 5px;
+  padding: 4px;
+}
+
+.inputs button {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.questao-card {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+}
+
+.context {
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.intro {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.alternativas {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+.alternativa {
+  width: 100%;
+  text-align: left;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  margin-bottom: 5px;
+  transition: background-color 0.2s;
+}
+
+.alternativa:hover {
+  background-color: #e0e0e0;
+}
+
+.alternativa.selecionada {
+  background-color: #d0d0d0;
+}
+
+.resultado {
+  font-weight: bold;
+  font-size: 1.1em;
+}

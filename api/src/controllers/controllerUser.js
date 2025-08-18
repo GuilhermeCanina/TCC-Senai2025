@@ -169,6 +169,23 @@ async function updateAvatar(req, res) {
   }
 }
 
+async function updateMyName(req, res) {
+  try {
+    const { nome } = req.body;
+    if (!nome || !nome.trim()) return res.status(400).json({ error: 'Nome é obrigatório.' });
+
+    const user = await prisma.usuario.update({
+      where: { id: req.user.id },
+      data: { nome: nome.trim() },
+      select: { id: true, nome: true },
+    });
+    return res.json(user);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Erro ao atualizar nome.' });
+  }
+}
+
 module.exports = {
     getAllUsers,
     getUserById,
@@ -177,5 +194,6 @@ module.exports = {
     deleteUser,
     loginUser,
     getMe,
-    updateAvatar
+    updateAvatar,
+    updateMyName
 };

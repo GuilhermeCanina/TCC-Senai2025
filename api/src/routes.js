@@ -27,6 +27,7 @@ routes.get('/usuarios', autenticarToken, isAdmin, usuariosController.getAllUsers
 routes.get('/usuarios/:id', autenticarToken, usuariosController.getUserById);
 routes.put('/usuarios/:id', autenticarToken, usuariosController.updateUser);
 routes.delete('/usuarios/:id', autenticarToken, isAdmin, usuariosController.deleteUser); // ← apenas admin
+routes.patch('/usuarios/nome', autenticarToken, usuariosController.updateMyName); // ← atualizar nome do usuário
 
 routes.get('/me', autenticarToken, usuariosController.getMe);
 
