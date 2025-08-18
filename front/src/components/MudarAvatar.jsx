@@ -4,20 +4,25 @@ import '../styles/avatarUploader.css';
 
 function AvatarUploader({ currentAvatar, userInitial }) {
   const [preview, setPreview] = useState(currentAvatar || null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-
       setPreview(URL.createObjectURL(file));
     }
   };
 
   const handleUpload = async (e) => {
     e.preventDefault();
+    setIsUploading(true);
 
     const file = e.target.avatar.files[0];
-    if (!file) return alert("Selecione uma imagem!");
+    if (!file) {
+      alert("Selecione uma imagem!");
+      setIsUploading(false);
+      return;
+    }
 
     const formData = new FormData();
     formData.append("avatar", file);
@@ -36,26 +41,37 @@ function AvatarUploader({ currentAvatar, userInitial }) {
     } catch (err) {
       console.error(err);
       alert("Erro ao enviar imagem");
+    } finally {
+      setIsUploading(false);
     }
   };
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <div className="user-avatar" style={{ marginBottom: "10px" }}>
+    <div className="avatar-uploader-container">
+      <div className="user-avatar">
         {preview ? (
-          <img src={preview} alt="avatar" style={{ width: 80, height: 80, borderRadius: "50%" }} />
+          <img src={preview} alt="avatar" />
         ) : (
           <div className="user-initial">{userInitial}</div>
         )}
       </div>
 
-      <form onSubmit={handleUpload}>
-        <input type="file" name="avatar" accept="image/*" onChange={handleFileChange} />
-        <button type="submit">Enviar</button>
+      <form className="avatar-uploader-form" onSubmit={handleUpload}>
+        <label htmlFor="avatar-upload" className="file-input-label">
+          Escolher Imagem
+        </label>
+        <input 
+          id="avatar-upload" 
+          type="file" 
+          name="avatar" 
+          accept="image/*" 
+          onChange={handleFileChange} 
+        />
+        <button type="submit" disabled={isUploading}>
+          {isUploading ? 'Enviando...' : 'Enviar Avatar'}
+        </button>
       </form>
     </div>
-
-    
   );
 }
 

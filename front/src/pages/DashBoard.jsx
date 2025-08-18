@@ -48,61 +48,61 @@ function Dashboard() {
 
         {/* User Profile */}
         <div className="user-profile">
-          <a href="#profile">
-          <div className="user-avatar">
-            {avatar ? (
-              <img
-                src={avatar}
-                alt="avatar"
-                style={{ width: 100, height: 100, borderRadius: '50%' }}
-              />
-            ) : (
-              <div className="user-initial">{userInitial}</div>
-            )}
-          </div>
-          </a>
-          <div className="user-info">
-            <h3>{nomeUsuario || 'Usuário'}</h3>
-            <p>Premium Member</p>
+          <div onClick={() => navigate('/config')} style={{ cursor: 'pointer' }}>
+            <div className="user-avatar">
+              {avatar ? (
+                <img
+                  src={avatar}
+                  alt="avatar"
+                  style={{ width: 100, height: 100, borderRadius: '50%' }}
+                />
+              ) : (
+                <div className="user-initial">{userInitial}</div>
+              )}
+            </div>
+            <div className="user-info">
+              <h3>{nomeUsuario || 'Usuário'}</h3>
+              <p>Premium Member</p>
+            </div>
           </div>
         </div>
 
         <ul className="sidebar-menu">
           <li className="menu-item">
-            <a href="#home" className="active">
+            <div onClick={() => navigate('/dashboard')} className="active" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '0.8rem 1rem' }}>
               <FiHome className="menu-icon" />
               <span>Dashboard</span>
-            </a>
+            </div>
           </li>
           <li className="menu-item">
-            <a href="/sessao">
+            <div onClick={() => navigate('/sessao')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '0.8rem 1rem' }}>
               <FiBook className="menu-icon" />
               <span>Sessões</span>
-            </a>
+            </div>
           </li>
           <li className="menu-item">
-            <a href="#relatorios">
+            <div onClick={() => navigate('/relatorios')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '0.8rem 1rem' }}>
               <FiBarChart2 className="menu-icon" />
               <span>Relatórios</span>
-            </a>
+            </div>
           </li>
           <li className="menu-item">
-            <a href="#chat">
+            <div onClick={() => navigate('/chat')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '0.8rem 1rem' }}>
               <FiMessageSquare className="menu-icon" />
               <span>Chat IA</span>
-            </a>
+            </div>
           </li>
           <li className="menu-item">
-            <a href="#medalhas">
+            <div onClick={() => navigate('/medalhas')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '0.8rem 1rem' }}>
               <FiAward className="menu-icon" />
               <span>Medalhas</span>
-            </a>
+            </div>
           </li>
           <li className="menu-item">
-            <a href="/config">
+            <div onClick={() => navigate('/config')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '0.8rem 1rem' }}>
               <FiSettings className="menu-icon" />
               <span>Configurações</span>
-            </a>
+            </div>
           </li>
         </ul>
       </div>
@@ -187,9 +187,9 @@ function Dashboard() {
           </button>
         </div>
         <section id="chat">
-    <h2>Chat com IA</h2>
-    <ChatBox />
-    </section>
+          <h2>Chat com IA</h2>
+          <ChatBox />
+        </section>
       </main>
     </div>
   );

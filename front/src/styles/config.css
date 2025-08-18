@@ -1,0 +1,183 @@
+/* config.css - Versão Refinada */
+
+/* Estilos Base Melhorados */
+.config-container {
+  max-width: 800px; /* Reduzi para melhor leitura */
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  color: var(--dark);
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+}
+
+.config-container h1 {
+  font-size: 2.2rem;
+  margin-bottom: 1.8rem;
+  color: var(--primary);
+  font-weight: 700;
+  text-align: center;
+  position: relative;
+  padding-bottom: 0.8rem;
+}
+
+.config-container h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: var(--secondary);
+  border-radius: 2px;
+}
+
+.config-container h2 {
+  font-size: 1.5rem;
+  margin: 1.2rem 0 0.8rem;
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+/* Seções Refinadas */
+.config-section {
+  background: white;
+  border-radius: 12px;
+  padding: 1.8rem;
+  margin-bottom: 1.8rem;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Containers de Componentes */
+.avatar-uploader-container,
+.name-changer-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding: 1.5rem;
+  background: var(--light);
+  border-radius: 8px;
+  margin-top: 0.8rem;
+}
+
+/* Sistema de Botões Refinado */
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.btn {
+  min-width: 120px; /* Largura mínima para consistência */
+  padding: 0.85rem 1.8rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  position: relative;
+  text-align: center;
+}
+
+/* Estilos Específicos de Botões */
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(108, 92, 231, 0.2);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+}
+
+.btn-secondary {
+  background-color: white;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.btn-secondary:hover {
+  background-color: rgba(108, 92, 231, 0.05);
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: white;
+  margin-top: 0.5rem;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+}
+
+/* Efeitos de Foco e Ativo */
+.btn:focus {
+  outline: 2px solid var(--secondary);
+  outline-offset: 2px;
+}
+
+.btn:active {
+  transform: translateY(1px) !important;
+}
+
+/* Ícones */
+.icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Zona de Perigo */
+.danger-zone {
+  border-left: 3px solid var(--danger);
+  padding-left: 1.5rem;
+}
+
+.danger-zone h2 {
+  color: var(--danger);
+}
+
+.danger-zone-container {
+  background-color: rgba(214, 48, 49, 0.03);
+  padding: 1.2rem;
+  border-radius: 8px;
+}
+
+/* Responsividade Aprimorada */
+@media (max-width: 768px) {
+  .config-container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .button-group {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .config-container h1 {
+    font-size: 1.9rem;
+  }
+  
+  .config-section {
+    padding: 1.3rem;
+  }
+  
+  .avatar-uploader-container,
+  .name-changer-container {
+    padding: 1.2rem;
+  }
+}

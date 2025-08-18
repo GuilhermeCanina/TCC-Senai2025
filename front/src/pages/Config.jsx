@@ -1,18 +1,34 @@
 import AvatarUploader from '../components/MudarAvatar';
 import MudarNome from '../components/MudarNome';
+import '../styles/config.css';
 
 function Config() {
   return (
-    <div>
+    <div className="config-container">
       <h1>Configurações</h1>
-      <section>
+      
+      <section className="config-section">
         <h2>Alterar Avatar</h2>
-        <AvatarUploader currentAvatar={null} userInitial={""} />
+        <div className="avatar-uploader-container">
+          <AvatarUploader currentAvatar={null} userInitial={""} />
+        </div>
+      </section>
+      
+      <section className="config-section">
+        <h2>Alterar Nome</h2>
+        <div className="name-changer-container">
+          <MudarNome />
+        </div>
       </section>
 
-      <section>
-        <h2>Alterar Nome</h2>
-        <MudarNome />
+      <section className="config-section danger-zone">
+        <h2>Zona de Perigo</h2>
+        <div className="danger-zone-container">
+          <p>Essas ações são irreversíveis. Tenha certeza antes de prosseguir.</p>
+          <button className="btn btn-danger">
+            <i className="icon-trash"></i> Excluir Conta
+          </button>
+        </div>
       </section>
     </div>
   );
