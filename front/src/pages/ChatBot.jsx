@@ -1,6 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import "../styles/chatbox.css"; // você pode criar depois
+import "../styles/chatbox.css";
+import ReactMarkdown from 'react-markdown';
 
 export default function ChatBox() {
   const [input, setInput] = useState("");
@@ -35,7 +36,7 @@ export default function ChatBox() {
             key={i}
             className={`chat-bubble ${m.sender === "Você" ? "user" : "ia"}`}
           >
-            <strong>{m.sender}:</strong> {m.text}
+            <strong>{m.sender}:</strong> <ReactMarkdown>{m.text}</ReactMarkdown>
           </div>
         ))}
       </div>

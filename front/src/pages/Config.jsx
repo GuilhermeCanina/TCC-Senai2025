@@ -1,6 +1,7 @@
 import AvatarUploader from '../components/MudarAvatar';
 import MudarNome from '../components/MudarNome';
 import ExcluirConta from '../components/ExcluirConta';
+import MudarEmail from '../components/MudarEmail';
 import '../styles/config.css';
 
 function Config() {
@@ -19,6 +20,13 @@ function Config() {
         <h2>Alterar Nome</h2>
         <div className="name-changer-container">
           <MudarNome />
+        </div>
+      </section>
+
+      <section className="config-section">
+        <h2>Alterar Email</h2>
+        <div className="email-changer-container">
+          <MudarEmail />
         </div>
       </section>
 

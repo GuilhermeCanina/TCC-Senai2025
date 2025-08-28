@@ -24,6 +24,8 @@ model Usuario {
   mensagens    Mensagem[]
   role        String         @default("usuario") // pode ser "admin" ou "usuario"
   medalhas     UsuarioMedalha[]
+  respostas    Resposta[]
+
 }
 
 model SessaoEstudo {
@@ -51,6 +53,8 @@ model UsuarioMedalha {
 
   usuario    Usuario  @relation(fields: [usuarioId], references: [id])
   medalha    Medalha  @relation(fields: [medalhaId], references: [id])
+
+  @@unique([usuarioId, medalhaId])
 }
 
 model Mensagem {
@@ -60,7 +64,16 @@ model Mensagem {
   resposta   String?
   enviadaEm  DateTime @default(now())
 
-  usuario    Usuario  @relation(fields: [usuarioId], references: [id])
+  usuario    Usuario?  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 }
 
+model Resposta {
+  id         Int       @id @default(autoincrement())
+  usuarioId  Int?      
+  questaoId  Int
+  correta    Boolean
+  createdAt  DateTime  @default(now())
+
+  usuario    Usuario?  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+}
 

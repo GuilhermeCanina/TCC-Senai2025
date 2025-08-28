@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/iniciarestudo.css";
 
@@ -8,8 +8,51 @@ export default function IniciarEstudo() {
   const [questoes, setQuestoes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [respostas, setRespostas] = useState({});
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+
+  // Timer
+  const [isRunning, setIsRunning] = useState(false);
+  const [seconds, setSeconds] = useState(0);
+
+  // Recupera o usuário e token do localStorage
+  useEffect(() => {
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    const tkn = localStorage.getItem("token");
+
+    if (usuario?.id && tkn) {
+      setUser({ id: usuario.id });
+      setToken(tkn);
+    }
+  }, []);
+
+  // Incrementa o timer
+  useEffect(() => {
+    let interval;
+    if (isRunning) {
+      interval = setInterval(() => {
+        setSeconds((prev) => prev + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isRunning]);
+
+  const formatTime = (secs) => {
+    const h = Math.floor(secs / 3600);
+    const m = Math.floor((secs % 3600) / 60);
+    const s = secs % 60;
+    return `${String(h).padStart(2, "0")}:${String(m).padStart(
+      2,
+      "0"
+    )}:${String(s).padStart(2, "0")}`;
+  };
 
   const buscarQuestoes = async () => {
+    if (!user || !token) {
+      alert("Você precisa estar logado para buscar questões.");
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await axios.get(
@@ -17,6 +60,8 @@ export default function IniciarEstudo() {
       );
       setQuestoes(response.data.questions);
       setRespostas({});
+      setSeconds(0);
+      setIsRunning(true); // inicia timer junto com as questões
     } catch (error) {
       console.error("Erro ao buscar questões:", error);
       alert("Erro ao carregar questões. Tente novamente.");
@@ -24,13 +69,74 @@ export default function IniciarEstudo() {
     setLoading(false);
   };
 
-  const escolherAlternativa = (index, letra) => {
-    setRespostas((prev) => ({ ...prev, [index]: letra }));
+  const encerrarSessao = async () => {
+    setIsRunning(false);
+    const minutos = Math.floor(seconds / 60);
+
+    if (minutos === 0) {
+      alert("Sessão muito curta, não será salva.");
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        "http://localhost:3001/sessoes",
+        {
+          usuarioId: user.id,
+          topico: "Questões ENEM",
+          duracao: minutos,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      alert(`Sessão salva! Duração: ${minutos} minutos`);
+      console.log(res.data);
+      setSeconds(0);
+      setQuestoes([]);
+    } catch (err) {
+      console.error("Erro ao salvar sessão:", err);
+      alert("Erro ao salvar sessão");
+    }
   };
+
+  const escolherAlternativa = async (index, letra) => {
+    setRespostas((prev) => ({ ...prev, [index]: letra }));
+
+    const questao = questoes.find((q) => q.index === index);
+    if (!questao || !user || !token) return;
+
+    const respostaCorreta = questao.alternatives.find(
+      (a) => a.isCorrect
+    )?.letter;
+    const acertou = letra === respostaCorreta;
+
+    try {
+      await axios.post(
+        "http://localhost:3001/respostas",
+        {
+          usuarioId: user.id,
+          questaoId: questao.index,
+          correta: acertou,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (err) {
+      console.error("Erro ao salvar resposta:", err);
+    }
+  };
+
+  const mensagensErradas = [
+    "Não foi dessa vez!",
+    "Ops, tente novamente!",
+    "Quase lá!",
+    "Resposta incorreta!",
+  ];
 
   return (
     <div className="container">
       <h1>Iniciar Estudo</h1>
+
+      <p className="timer">⏳ Tempo: {formatTime(seconds)}</p>
 
       <div className="inputs">
         <label>
@@ -56,31 +162,47 @@ export default function IniciarEstudo() {
         </label>
 
         <button onClick={buscarQuestoes} disabled={loading}>
-          {loading ? 'Buscando...' : 'Buscar Questões'}
+          {loading ? "Buscando..." : "Buscar Questões"}
         </button>
+
+        {isRunning && (
+          <button onClick={encerrarSessao} className="encerrar">
+            ⏹️ Encerrar Sessão
+          </button>
+        )}
       </div>
 
       {loading && <p className="loading">Carregando questões...</p>}
 
       {questoes.map((q) => {
-        const respostaCorreta = q.alternatives.find((a) => a.isCorrect)?.letter;
         const respostaUsuario = respostas[q.index];
+        const respostaCorreta = q.alternatives.find((a) => a.isCorrect)?.letter;
         const acertou = respostaUsuario === respostaCorreta;
+
+        const mensagem = respostaUsuario
+          ? acertou
+            ? "✅ Resposta Correta!"
+            : mensagensErradas[
+                Math.floor(Math.random() * mensagensErradas.length)
+              ]
+          : "";
 
         return (
           <section key={q.index} className="questao-card">
             <h3>Questão {q.index}</h3>
             {q.context && <p className="context">{q.context}</p>}
-            {q.alternativesIntroduction && <p className="intro">{q.alternativesIntroduction}</p>}
+            {q.alternativesIntroduction && (
+              <p className="intro">{q.alternativesIntroduction}</p>
+            )}
 
             <ul className="alternativas">
               {q.alternatives.map((a) => {
                 const isEscolhida = respostaUsuario === a.letter;
-                const mostrarCor = respostaUsuario 
-                  ? a.isCorrect 
-                    ? "var(--success)" 
-                    : isEscolhida 
-                    ? "var(--danger)" 
+                const mostrarCor = respostaUsuario
+                  ? a.isCorrect
+                    ? "var(--success)"
+                    : isEscolhida
+                    ? "var(--danger)"
                     : "inherit"
                   : "inherit";
 
@@ -88,7 +210,9 @@ export default function IniciarEstudo() {
                   <li key={a.letter}>
                     <button
                       onClick={() => escolherAlternativa(q.index, a.letter)}
-                      className={`alternativa ${isEscolhida ? "selecionada" : ""}`}
+                      className={`alternativa ${
+                        isEscolhida ? "selecionada" : ""
+                      }`}
                       style={{ color: mostrarCor }}
                       disabled={!!respostaUsuario}
                     >
@@ -101,9 +225,8 @@ export default function IniciarEstudo() {
 
             {respostaUsuario && (
               <p className={`resultado ${acertou ? "correto" : "errado"}`}>
-                {acertou 
-                  ? "✅ Resposta Correta!" 
-                  : `❌ Resposta Incorreta! A correta é ${respostaCorreta}.`}
+                {mensagem}{" "}
+                {acertou ? "" : `A correta é ${respostaCorreta}.`}
               </p>
             )}
           </section>

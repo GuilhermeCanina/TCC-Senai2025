@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/dashboard.css';
 import ChatBox from './ChatBot';
 import axios from 'axios';
-import { FiHome, FiBook, FiBarChart2, FiMessageSquare, FiAward, FiSettings, FiLogOut } from 'react-icons/fi';
+import { FiHome, FiBook, FiBarChart2, FiAward, FiSettings, FiLogOut } from 'react-icons/fi';
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -11,24 +11,28 @@ function Dashboard() {
   const [userInitial, setUserInitial] = useState('');
   const [avatar, setAvatar] = useState(null);
 
+  const [chatOpen, setChatOpen] = useState(false);
+
+
   useEffect(() => {
     const token = localStorage.getItem('token');
 
     if (!token) {
       navigate('/login');
     } else {
-      axios.get('http://localhost:3001/me', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      .then((res) => {
-        setNomeUsuario(res.data.nome);
-        setUserInitial(res.data.nome.charAt(0).toUpperCase());
-        if (res.data.avatarurl) setAvatar(res.data.avatarurl);
-      })
-      .catch(() => {
-        localStorage.removeItem('token');
-        navigate('/login');
-      });
+      axios
+        .get('http://localhost:3001/me', {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          setNomeUsuario(res.data.nome);
+          setUserInitial(res.data.nome.charAt(0).toUpperCase());
+          if (res.data.avatarurl) setAvatar(res.data.avatarurl);
+        })
+        .catch(() => {
+          localStorage.removeItem('token');
+          navigate('/login');
+        });
     }
   }, [navigate]);
 
@@ -46,7 +50,6 @@ function Dashboard() {
           <h2>SynapLearn</h2>
         </div>
 
-        {/* User Profile */}
         <div className="user-profile">
           <div onClick={() => navigate('/config')} style={{ cursor: 'pointer' }}>
             <div className="user-avatar">
@@ -69,31 +72,72 @@ function Dashboard() {
 
         <ul className="sidebar-menu">
           <li className="menu-item">
-            <div onClick={() => navigate('/dashboard')} className="active" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '0.8rem 1rem' }}>
+            <div
+              onClick={() => navigate('/dashboard')}
+              className="active"
+              style={{
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '0.8rem 1rem',
+              }}
+            >
               <FiHome className="menu-icon" />
               <span>Dashboard</span>
             </div>
           </li>
           <li className="menu-item">
-            <div onClick={() => navigate('/sessao')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '0.8rem 1rem' }}>
+            <div
+              onClick={() => navigate('/sessao')}
+              style={{
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '0.8rem 1rem',
+              }}
+            >
               <FiBook className="menu-icon" />
               <span>Sessões</span>
             </div>
           </li>
           <li className="menu-item">
-            <div onClick={() => navigate('/relatorios')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '0.8rem 1rem' }}>
+            <div
+              onClick={() => navigate('/relatorios')}
+              style={{
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '0.8rem 1rem',
+              }}
+            >
               <FiBarChart2 className="menu-icon" />
               <span>Relatórios</span>
             </div>
           </li>
           <li className="menu-item">
-            <div onClick={() => navigate('/medalhas')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '0.8rem 1rem' }}>
+            <div
+              onClick={() => navigate('/medalhas')}
+              style={{
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '0.8rem 1rem',
+              }}
+            >
               <FiAward className="menu-icon" />
               <span>Medalhas</span>
             </div>
           </li>
           <li className="menu-item">
-            <div onClick={() => navigate('/config')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '0.8rem 1rem' }}>
+            <div
+              onClick={() => navigate('/config')}
+              style={{
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '0.8rem 1rem',
+              }}
+            >
               <FiSettings className="menu-icon" />
               <span>Configurações</span>
             </div>
@@ -101,12 +145,11 @@ function Dashboard() {
         </ul>
       </div>
 
-      {/* Conteúdo principal */}
       <main className="dashboard-main">
         <header className="dashboard-header">
           <div className="dashboard-title">
             <h1>Bem-vindo, {nomeUsuario || 'usuário'}!</h1>
-            <p>Seu desempenho está melhorando a cada dia!</p>
+            <p> Você está arrasando hoje!</p>
           </div>
         </header>
 
@@ -152,39 +195,29 @@ function Dashboard() {
         </div>
 
         <div className="dashboard-buttons">
-          <button
-            className="btn btn-primary"
-            onClick={() => navigate('/sessao')}
-          >
+          <button className="btn btn-cta" onClick={() => navigate('/sessao')}>
             <FiBook /> Iniciar Sessão de Estudo
           </button>
 
-          <button
-            className="btn btn-secondary"
-            onClick={() => navigate('/relatorios')}
-          >
+          <button className="btn btn-secondary" onClick={() => navigate('/relatorios')}>
             <FiBarChart2 /> Ver Relatórios
           </button>
 
-          <button
-            className="btn btn-warning"
-            onClick={() => navigate('/medalhas')}
-          >
+          <button className="btn btn-warning" onClick={() => navigate('/medalhas')}>
             <FiAward /> Minhas Medalhas
           </button>
 
-          <button
-            className="btn btn-danger"
-            onClick={handleLogout}
-          >
+          <button className="btn btn-danger" onClick={handleLogout}>
             <FiLogOut /> Sair
           </button>
         </div>
-        <section id="chat">
-          <h2>Chat com IA</h2>
-          <ChatBox />
-        </section>
       </main>
+
+      {/* Chat flutuante */}
+      <button className="chat-toggle" onClick={() => setChatOpen(!chatOpen)}>💬</button>
+      <div className={`chat-window ${chatOpen ? 'active' : ''}`}>
+        <ChatBox />
+      </div>
     </div>
   );
 }

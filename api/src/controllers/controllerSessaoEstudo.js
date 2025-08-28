@@ -33,9 +33,13 @@ async function createSessaoEstudo(req, res) {
           data: { usuarioId, topico, duracao },
       });
 
-      await verificarEMedalharUsuario(usuarioId); 
+      const novasMedalhas = await verificarEMedalharUsuario(usuarioId); 
 
-      res.status(201).json(novaSessao);
+      res.status(201).json({
+        message: "Sessão criada com sucesso!",
+        sessao: novaSessao,
+        medalhas: novasMedalhas
+      });
   } catch (error) {
       console.error('Erro ao criar sessão:', error);
       res.status(500).json({ error: 'Erro ao criar sessão' });

@@ -203,6 +203,49 @@ async function updateMyName(req, res) {
   }
 }
 
+async function updateMyEmail(req, res) {
+  try {
+    const { email } = req.body;
+    if (!email || !email.trim()) return res.status(400).json({ error: 'Email é obrigatório.' });
+
+    const user = await prisma.usuario.update({
+      where: { id: req.user.id },
+      data: { email: email.trim() },
+      select: { id: true, email: true },
+    });
+    return res.json(user);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Erro ao atualizar email.' + err.message });
+  }
+}
+
+async function getUserMedalhas(req, res) {
+  const { id } = req.params;
+
+  try {
+    const user = await prisma.usuario.findUnique({
+      where: { id: Number(id) },
+      include: {
+        medalhas: {
+          include: { medalha: true },
+        },
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "Usuário não encontrado" });
+    }
+
+    const medalhas = user.medalhas.map((um) => um.medalha);
+
+    res.json(medalhas);
+  } catch (error) {
+    console.error("Erro ao buscar medalhas do usuário:", error);
+    res.status(500).json({ error: "Erro ao buscar medalhas" });
+  }
+}
+
 module.exports = {
     getAllUsers,
     getUserById,
@@ -213,5 +256,7 @@ module.exports = {
     getMe,
     updateAvatar,
     updateMyName,
-    deleteMe
+    deleteMe,
+    updateMyEmail,
+    getUserMedalhas
 };

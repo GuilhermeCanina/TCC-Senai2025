@@ -5,7 +5,8 @@ const usuariosController = require('./controllers/controllerUser');
 const medalhasController = require('./controllers/controllerMedalha');
 const sessaoEstudoController = require('./controllers/controllerSessaoEstudo');
 const mensagensController = require('./controllers/controllermensagens');
-const RelatorioController = require('./controllers/controllerRelatorio');
+const respostasController = require('./controllers/controllerResposta');
+
 
 const upload = require('../uploads/uploadConfig');
 const { updateAvatar } = require('./controllers/controllerUser');
@@ -21,8 +22,8 @@ routes.get('/', (req, res) => {
 });
 
 // ROTAS DE RELATÓRIO
-routes.post('/relatorios', autenticarToken, RelatorioController.criarRelatorio);
-routes.get('/relatorios/:usuarioId', autenticarToken, RelatorioController.listarRelatorios);
+routes.post('/respostas', autenticarToken, respostasController.criarResposta);
+routes.get('/respostas/:usuarioId', autenticarToken, respostasController.relatorio);
 
 // ROTAS DE USUÁRIO
 routes.post('/usuarios', validateUser, usuariosController.createUser);
@@ -32,15 +33,16 @@ routes.get('/usuarios', autenticarToken, isAdmin, usuariosController.getAllUsers
 routes.get('/usuarios/:id', autenticarToken, usuariosController.getUserById);
 routes.put('/usuarios/:id', autenticarToken, usuariosController.updateUser);
 routes.delete('/usuarios/:id', autenticarToken, isAdmin, usuariosController.deleteUser); // ← apenas admin
-routes.patch('/usuarios/nome', autenticarToken, usuariosController.updateMyName); // ← atualizar nome do usuário
+routes.patch('/usuarios/nome', autenticarToken, usuariosController.updateMyName); // ← atualizar nome do usuário~
+routes.patch('/usuarios/email', autenticarToken, usuariosController.updateMyEmail); // ← atualizar email do usuário
 
 routes.get('/me', autenticarToken, usuariosController.getMe);
 routes.delete('/me', autenticarToken, usuariosController.deleteMe); // ← excluir própria conta
 
 // ROTAS DE MEDALHA
-routes.get('/medalhas', autenticarToken, medalhasController.getAllMedalhas);
-routes.get('/medalhas/:id', autenticarToken, medalhasController.getMedalhaById);
+routes.get('/usuarios/:id/medalhas', autenticarToken, usuariosController.getUserMedalhas);
 routes.post('/medalhas', autenticarToken, isAdmin, medalhasController.createMedalha); // ← apenas admin
+
 
 // ROTAS DE SESSÕES DE ESTUDO
 routes.get('/sessoes', autenticarToken, sessaoEstudoController.getAllSessoes);
