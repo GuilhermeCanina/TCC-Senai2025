@@ -29,22 +29,29 @@ async function createSessaoEstudo(req, res) {
   const { usuarioId, topico, duracao } = req.body;
 
   try {
-      const novaSessao = await prisma.sessaoEstudo.create({
-          data: { usuarioId, topico, duracao },
-      });
+    const novaSessao = await prisma.sessaoEstudo.create({
+      data: { usuarioId, topico, duracao },
+    });
 
-      const novasMedalhas = await verificarEMedalharUsuario(usuarioId); 
+    let novasMedalhas = [];
 
-      res.status(201).json({
-        message: "Sessão criada com sucesso!",
-        sessao: novaSessao,
-        medalhas: novasMedalhas
-      });
+    try {
+      novasMedalhas = await verificarEMedalharUsuario(usuarioId);
+    } catch (err) {
+      console.warn("Erro ao atribuir medalhas (não crítico):", err.message);
+    }
+
+    return res.status(201).json({
+      message: "Sessão criada com sucesso!",
+      sessao: novaSessao,
+      medalhas: novasMedalhas,
+    });
   } catch (error) {
-      console.error('Erro ao criar sessão:', error);
-      res.status(500).json({ error: 'Erro ao criar sessão' });
+    console.error("Erro ao criar sessão:", error);
+    return res.status(500).json({ error: "Erro ao criar sessão" });
   }
 }
+
 
 
 async function updateSessao(req, res) {

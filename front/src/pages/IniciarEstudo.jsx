@@ -61,7 +61,7 @@ export default function IniciarEstudo() {
       setQuestoes(response.data.questions);
       setRespostas({});
       setSeconds(0);
-      setIsRunning(true); // inicia timer junto com as questões
+      setIsRunning(true);
     } catch (error) {
       console.error("Erro ao buscar questões:", error);
       alert("Erro ao carregar questões. Tente novamente.");
@@ -79,6 +79,12 @@ export default function IniciarEstudo() {
     }
 
     try {
+      console.log("Dados enviados:", {
+  usuarioId: user?.id,
+  topico: "Questões ENEM",
+  duracao: minutos
+});
+
       const res = await axios.post(
         "http://localhost:3001/sessoes",
         {
