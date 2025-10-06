@@ -1,0 +1,750 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Estudo em Grupo (Node + Prisma + MySQL/ MariaDB)",
+    "version": "1.0.0",
+    "description": "Documentação da API do projeto TCC-Senai2025"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001",
+      "description": "Servidor local"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Geral"
+    },
+    {
+      "name": "Autenticação"
+    },
+    {
+      "name": "Usuários"
+    },
+    {
+      "name": "Medalhas"
+    },
+    {
+      "name": "Sessões de Estudo"
+    },
+    {
+      "name": "IA"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Usuario": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "admin"
+            ]
+          },
+          "criadoEm": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UsuarioCreate": {
+        "type": "object",
+        "required": [
+          "nome",
+          "email",
+          "senha"
+        ],
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Ana Silva"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "ana@email.com"
+          },
+          "senha": {
+            "type": "string",
+            "example": "senha123"
+          }
+        }
+      },
+      "UsuarioUpdate": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Ana (atualizada)"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "ana.new@email.com"
+          },
+          "senha": {
+            "type": "string",
+            "example": "novaSenha123"
+          }
+        }
+      },
+      "LoginInput": {
+        "type": "object",
+        "required": [
+          "email",
+          "senha"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "admin@email.com"
+          },
+          "senha": {
+            "type": "string",
+            "example": "admin123"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Login bem-sucedido"
+          },
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOi..."
+          }
+        }
+      },
+      "Medalha": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "titulo": {
+            "type": "string"
+          },
+          "descricao": {
+            "type": "string"
+          }
+        }
+      },
+      "MedalhaCreate": {
+        "type": "object",
+        "required": [
+          "titulo",
+          "descricao"
+        ],
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "example": "5 sessões concluídas"
+          },
+          "descricao": {
+            "type": "string",
+            "example": "Concedida ao completar 5 sessões de estudo"
+          }
+        }
+      },
+      "SessaoEstudo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "usuarioId": {
+            "type": "integer"
+          },
+          "topico": {
+            "type": "string"
+          },
+          "duracao": {
+            "type": "integer",
+            "description": "Duração em minutos"
+          }
+        }
+      },
+      "SessaoCreate": {
+        "type": "object",
+        "required": [
+          "usuarioId",
+          "topico",
+          "duracao"
+        ],
+        "properties": {
+          "usuarioId": {
+            "type": "integer",
+            "example": 1
+          },
+          "topico": {
+            "type": "string",
+            "example": "Cálculo I - Limites"
+          },
+          "duracao": {
+            "type": "integer",
+            "example": 90
+          }
+        }
+      },
+      "SessaoUpdate": {
+        "type": "object",
+        "properties": {
+          "topico": {
+            "type": "string",
+            "example": "Cálculo I - Derivadas"
+          },
+          "duracao": {
+            "type": "integer",
+            "example": 60
+          }
+        }
+      },
+      "MensagemIAInput": {
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "example": "Explique leis de Newton de forma simples."
+          }
+        }
+      },
+      "MensagemIAResponse": {
+        "type": "object",
+        "properties": {
+          "response": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "Geral"
+        ],
+        "summary": "Status da API",
+        "responses": {
+          "200": {
+            "description": "API de Estudo em Grupo funcionando!"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "Autenticação"
+        ],
+        "summary": "Login e geração de JWT",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login bem-sucedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciais inválidas"
+          }
+        }
+      }
+    },
+    "/usuarios": {
+      "post": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Criar usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsuarioCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário criado"
+          },
+          "400": {
+            "description": "Email já está em uso"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Listar usuários (admin)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de usuários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Usuario"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso negado"
+          }
+        }
+      }
+    },
+    "/usuarios/{id}": {
+      "get": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Obter usuário por ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Atualizar usuário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsuarioUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuário atualizado"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Deletar usuário (admin)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Usuário deletado"
+          },
+          "403": {
+            "description": "Acesso negado"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Dados do usuário autenticado",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do usuário autenticado"
+          },
+          "401": {
+            "description": "Token ausente ou inválido"
+          }
+        }
+      }
+    },
+    "/medalhas": {
+      "get": {
+        "tags": [
+          "Medalhas"
+        ],
+        "summary": "Listar medalhas",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de medalhas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Medalha"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Medalhas"
+        ],
+        "summary": "Criar medalha (admin)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MedalhaCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Medalha criada"
+          },
+          "403": {
+            "description": "Acesso negado"
+          }
+        }
+      }
+    },
+    "/medalhas/{id}": {
+      "get": {
+        "tags": [
+          "Medalhas"
+        ],
+        "summary": "Obter medalha por ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Medalha encontrada"
+          },
+          "404": {
+            "description": "Medalha não encontrada"
+          }
+        }
+      }
+    },
+    "/sessoes": {
+      "get": {
+        "tags": [
+          "Sessões de Estudo"
+        ],
+        "summary": "Listar sessões",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de sessões",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SessaoEstudo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Sessões de Estudo"
+        ],
+        "summary": "Criar sessão de estudo",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessaoCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Sessão criada"
+          }
+        }
+      }
+    },
+    "/sessoes/{id}": {
+      "get": {
+        "tags": [
+          "Sessões de Estudo"
+        ],
+        "summary": "Obter sessão por ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sessão"
+          },
+          "404": {
+            "description": "Sessão não encontrada"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Sessões de Estudo"
+        ],
+        "summary": "Atualizar sessão por ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessaoUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sessão atualizada"
+          },
+          "404": {
+            "description": "Sessão não encontrada"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Sessões de Estudo"
+        ],
+        "summary": "Deletar sessão por ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sessão deletada"
+          },
+          "404": {
+            "description": "Sessão não encontrada"
+          }
+        }
+      }
+    },
+    "/api/chat": {
+      "post": {
+        "tags": [
+          "IA"
+        ],
+        "summary": "Perguntar para a IA",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MensagemIAInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resposta da IA",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MensagemIAResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Campo 'text' é obrigatório."
+          },
+          "500": {
+            "description": "Erro ao gerar resposta da IA"
+          }
+        }
+      }
+    }
+  }
+}
