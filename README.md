@@ -83,3 +83,8 @@ npm run dev
 ```
 
 Certifique-se de criar um arquivo .env com sua variável DATABASE_URL.
+
+---
+## Links
+- Back: https://api-tcc-senai2025.vercel.app/
+- Front: https://synaplearn.vercel.app/
