@@ -1,0 +1,6 @@
+{
+  "appId": "com.synap.app",
+  "appName": "SynapLearn",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}

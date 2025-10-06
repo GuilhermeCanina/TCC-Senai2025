@@ -1,0 +1,124 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0d0d0f, #121212);
+  padding: 20px;
+  font-family: "Space Grotesk", sans-serif;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.login-container > form {
+  background: #1e1e24;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(108, 92, 231, 0.3);
+  padding: 40px;
+  width: 100%;
+  max-width: 380px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+}
+
+.login-container > form:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 35px rgba(0, 245, 212, 0.4);
+}
+
+.login-container h2 {
+  color: #f8f8f8;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 18px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: #2a2a32;
+  color: #f2f2f2;
+  transition: all 0.3s ease;
+}
+
+.login-container input:focus {
+  outline: none;
+  border: 1px solid #6c5ce7;
+  box-shadow: 0 0 10px #6c5ce7;
+  background: #24242c;
+}
+
+.login-container input::placeholder {
+  color: #a0aec0;
+  font-style: italic;
+}
+
+.login-container button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 100px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.login-container button[type="submit"] {
+  background: linear-gradient(135deg, #6c5ce7, #00f5d4);
+  color: #121212;
+}
+
+.login-container button[type="submit"]:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 20px #6c5ce7;
+}
+
+.login-container button[type="button"] {
+  background: transparent;
+  border: 1px solid #6c5ce7;
+  color: #f2f2f2;
+}
+
+.login-container button[type="button"]:hover {
+  background: rgba(108, 92, 231, 0.15);
+  box-shadow: 0 0 15px rgba(108, 92, 231, 0.5);
+  transform: translateY(-2px);
+}
+
+.error-message {
+  color: #ff6b6b;
+  font-size: 0.9rem;
+  margin-top: -10px;
+  margin-bottom: 15px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 480px) {
+  .login-container > form {
+    padding: 30px 20px;
+  }
+  
+  .login-container h2 {
+    font-size: 1.6rem;
+  }
+  
+  .login-container input,
+  .login-container button {
+    padding: 12px;
+  }
+}
+
+
